@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+	 ====================================================================== 
+     boss builder 4 product                                                      
+     ====================================================================== 
+-->
+     
+<project name="boss" default="pack">
+	<property name="tarForBoss" value="./target/tarForBoss"/>
+	<property name="Web" value="./target/boss"/>
+	<property name="appName" value="boss"/>
+	<property name="source" value="1.5"/>
+	<property name="target" value="1.5"/>
+	<property name="app.dir" value="." />
+
+	
+	<path id="boss.classpath">
+		<fileset dir="${app.dir}/target/boss/WEB-INF/lib/">
+		</fileset>
+	</path>
+
+	<target name="init">
+		<tstamp>
+			<format property="TODAY" pattern="yyyyMMdd" locale="cn"/>
+		</tstamp>		
+		<delete dir="${tarForBoss}"/>
+		<mkdir dir="${tarForBoss}"/>
+		<echo>${appName} ${TODAY}</echo>
+	</target>
+	
+	<target name="packStatic" depends="init">
+		
+		<tar destfile="${tarForBoss}/${appName}-${TODAY}.tar" >
+			<tarfileset dir="${Web}">
+				
+				
+				
+				<!--  20150701  提现秒到+民生厦门直连提现接口 -->
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/PursePayController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/PurseController.class"/>
+				
+				<include name="WEB-INF/classes/com/eeepay/boss/service/CmbcXMPayService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseCashService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseRecService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/SettleTransferDBService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/SZFSPayService.class"/>
+				
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashTaskNew.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashSynTaskNew.class"/>
+				
+				<include name="WEB-INF/view/purse/bagExtractionQuery.jsp"/>
+				<include name="WEB-INF/view/purse/bagExtraDetail.jsp"/>
+				<include name="WEB-INF/classes/spring/shiro.xml"/>
+				
+				
+				<!--
+				 20150512  bug修复
+				<include name="WEB-INF/classes/com/eeepay/boss/service/EciticPayService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/SZFSPayService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashTaskNew.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashSynTaskNew.class"/>
+				
+				20150508  修复【 DLOTHDET接口 status=ED02109  表示无制单信息，须状态置为失败】缺陷
+				<include name="WEB-INF/classes/com/eeepay/boss/service/EciticPayService.class"/>
+				
+				 20150508  钱包提现出账通道切换到结算中心
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashTaskNew.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashSynTaskNew.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/domain/SZFSBatSinglePay.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/domain/SZFSBatSinglePayItem.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/SZFSPayService.class"/>
+				<include name="WEB-INF/classes/xml/SZFS_BATSINGLEPAY.xml"/>
+				<include name="WEB-INF/classes/xml/SZFS_BIZTRANSQUERY.xml"/>
+				
+				
+				20150313  钱包提现出账通道切换到中信银行
+				<include name="WEB-INF/classes/com/eeepay/boss/task/EciticActiveTask.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashTaskNew.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashSynTaskNew.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/SettleTransferDBService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/EciticPayService.class"/>
+				<include name="WEB-INF/classes/xml/ECITIC_DLCIDSTT.xml"/>
+	      <include name="WEB-INF/classes/xml/ECITIC_DLINETRN.xml"/>
+	      <include name="WEB-INF/classes/xml/ECITIC_DLOTHDET.xml"/>
+	      <include name="WEB-INF/classes/xml/ECITIC_DLOTHSUB.xml"/>
+	      <include name="WEB-INF/classes/xml/ECITIC_DLOUTTRN.xml"/>
+				
+				20150129   钱包提现
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashTaskNew.class"/>
+				
+				20150128   钱包手工入账修订高并发可能出现的问题  
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/PurseController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseTransService.class"/>
+				
+				20150116   二维码支付 关闭boss服务，原服务已切换至core
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/APIController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/SZFSService.class"/>
+				20141226   二维码支付 
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/APIController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/QrCodePayNotifyService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/SZFSDbService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/utils/HttpComm.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/utils/SecureUtils.class"/>
+				<include name="WEB-INF/view/api/szfsQrCodeOrder.jsp"/>
+				<include name="WEB-INF/view/api/szfsQrCodeOrderQuery.jsp"/>
+				<include name="WEB-INF/view/api/szfsQrCodePay.jsp"/>
+				<include name="WEB-INF/classes/xml/SZFS_QRCODE_ORDER_QUERY.xml"/> 
+				<include name="WEB-INF/classes/xml/SZFS_QRCODE_ORDER.xml"/> 
+				<include name="WEB-INF/classes/xml/szfs000000000001.pfx"/> 
+				<include name="WEB-INF/classes/xml/szfs999999999999.crt"/> 
+				
+				20141208   钱包提现华夏通道迁移至boss
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/MerchantController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/utils/tag/TableSelectTag.class"/>
+				<include name="WEB-INF/view/merchant/merchantCheck.jsp"/>
+				<include name="WEB-INF/view/merchant/merchantCheckDetail.jsp"/>
+				<include name="WEB-INF/view/merchant/merchantInfo.jsp"/>
+				<include name="WEB-INF/view/merchant/merchantLiftQuery.jsp"/>
+				<include name="WEB-INF/view/merchant/merchantQuery.jsp"/>
+				<include name="WEB-INF/view/merchant/merchantRepeatCheck.jsp"/>
+				
+				20141208   钱包提现华夏通道迁移至boss
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/MerchantController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashTaskNew.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashSynTask.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashSynTaskNew.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/HxbDBService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/HxbPayService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/domain/HxbTransComparator.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/domain/ErrorVO.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/utils/DataStaticCache.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/utils/DuplicateSubmitCheck.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/utils/MasterDao.class"/>
+				<include name="WEB-INF/classes/hxb_zh_CN.properties"/> 
+				<include name="WEB-INF/lib/hxbAPI-0.0.6-RELEASE.jar"/>
+				<include name="WEB-INF/classes/spring/db.xml"/> 
+				
+				20141125  钱包入账添加AppType
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashTask.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/task/PurseCashSynTask.class"/>
+				
+				20141125  钱包入账添加AppType
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/PurseController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseService.class"/>
+				
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseTransService.class"/>
+				20141121   结算中心账户验证接口
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/APIController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/MerchantController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/SZFSService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/domain/ErrorVO.class"/>
+				
+				<include name="WEB-INF/view/api/szfsAccountVerify.jsp"/>
+				<include name="WEB-INF/classes/spring/shiro.xml"/> 
+				
+				20141027   钱包交易查询等优化
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/PurseController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseRecService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/utils/SysConfig.class"/>
+				<include name="WEB-INF/layouts/default.jsp"/>
+				<include name="WEB-INF/view/purse/addPurseMerchantRule.jsp"/>
+				<include name="WEB-INF/view/purse/bagExtractionQuery.jsp"/>
+				<include name="WEB-INF/view/purse/bagExtraDetail.jsp"/>
+				<include name="WEB-INF/view/purse/bagMerchantQuery.jsp"/>
+				<include name="WEB-INF/view/purse/bagReversalQuery.jsp"/>
+				<include name="WEB-INF/view/purse/bagReversalDetail.jsp"/>
+				<include name="WEB-INF/view/purse/bagTransactionDetail.jsp"/>
+				<include name="WEB-INF/view/purse/bagTransactionQuery.jsp"/>
+				<include name="WEB-INF/view/purse/bagTransQuery.jsp"/>
+				<include name="WEB-INF/classes/template/PURSE_TRANSACTION_DETAIL.xls"/>
+				
+				
+				 20141027   钱包手工冲正
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/PurseController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseService.class"/>
+					
+				<include name="WEB-INF/layouts/default.jsp"/>
+				<include name="WEB-INF/view/purse/bagReversalDetail.jsp"/>
+				<include name="WEB-INF/view/purse/bagReversalQuery.jsp"/>
+				
+				<include name="WEB-INF/classes/com/eeepay/boss/domain/ErrorVO.class"/>
+				20141023   钱包手工入账
+				<include name="WEB-INF/classes/com/eeepay/boss/controller/PurseController.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseTransService.class"/>
+				<include name="WEB-INF/classes/com/eeepay/boss/service/PurseService.class"/>
+				
+				<include name="WEB-INF/view/purse/bagTransQuery.jsp"/>
+				<include name="WEB-INF/view/purse/bagTransDetail.jsp"/>
+				<include name="WEB-INF/layouts/default.jsp"/>
+				
+				-->
+				
+			</tarfileset>
+		</tar>
+	</target>
+	
+	<target name="clean">
+		<delete dir="${tarForBoss}"/>
+		<mkdir dir="${tarForBoss}"/>
+	</target>
+
+	<target name="pack" depends="packStatic"/>
+
+	<target name="all" depends="clean, packStatic"/>
+</project>

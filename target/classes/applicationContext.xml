@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:task="http://www.springframework.org/schema/task"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.1.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd  http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.1.xsd"
+	default-lazy-init="false">
+
+     <task:annotation-driven/>
+    
+	<context:component-scan base-package="com.eeepay.boss">
+		<context:exclude-filter type="annotation"
+			expression="org.springframework.stereotype.Controller" />
+	</context:component-scan>
+
+	<!-- 导入数据库配置 -->
+	<import resource="classpath:spring/db.xml" />
+	<!-- 导入定时任务
+	<import resource="classpath:spring/quartz.xml" />  
+	 -->
+	<!-- 导入安全控制 -->
+	<import resource="classpath:spring/shiro.xml" />
+	<context:property-placeholder location="classpath:config/*.properties" />
+	<bean name="szfsBankNoCache" id="szfsBankNoCache" class="com.eeepay.boss.utils.SZFSBankNoCache" />
+	<bean name="sysConfig" id="sysConfig" class="com.eeepay.boss.utils.SysConfig"></bean>
+	<bean name="dictCache" id="dictCache" class="com.eeepay.boss.utils.DictCache" />
+	<bean name="genTerminalNo" id="genTerminalNo" class="com.eeepay.boss.utils.GenSyncNo"></bean>
+	<bean name="select" id="select" class="com.eeepay.boss.utils.tag.Select"></bean>
+	<bean name="TableSelectTag" id="TableSelectTag" class="com.eeepay.boss.utils.tag.TableSelectTag"></bean>
+	<bean name="POSModelSelectTag" id="POSModelSelectTag" class="com.eeepay.boss.utils.tag.POSModelSelectTag"></bean>
+	<bean name="PosModelNameTag" id="PosModelNameTag" class="com.eeepay.boss.utils.tag.PosModelNameTag"></bean>
+	<bean name="acqOrgName" id="acqOrgName" class="com.eeepay.boss.utils.tag.acqOrgName"></bean>
+	<bean name="PosTypeTag" id="PosTypeTag" class="com.eeepay.boss.utils.tag.PosTypeTag"></bean>
+	<bean name="bankCode" id="bankCode" class="com.eeepay.boss.utils.tag.BankCode"></bean>
+	<bean name="AgentNameForNo" id="AgentNameForNo" class="com.eeepay.boss.utils.tag.AgentNameForNo"></bean>
+    <bean name="selectAcqOrg" id="selectAcqOrg" class="com.eeepay.boss.utils.tag.SelectAcqOrg"></bean>
+	<bean name="smsUtil" id="smsUtil" class="com.eeepay.boss.utils.SmsUtil"></bean>
+<!-- 	<aop:config>    
+       <aop:advisor id="methodTimeLog" advice-ref="methodTimeAdvice" pointcut="execution(* com.eeepay.boss.controller.*.*(..)) "/>    
+   </aop:config>    
+    -->
+   <bean id="methodTimeAdvice" class="com.eeepay.boss.interceptor.MethodTimeAdvice"/>
+   
+   <bean id= "facadeMonitoringAdvisor" class="net.bull.javamelody.MonitoringSpringAdvisor" >
+	         <property name ="pointcut" >
+	                 <bean class="org.springframework.aop.support.JdkRegexpMethodPointcut" >
+	                 <property name="patterns">
+		                	<list>
+		                   		<value>com.eeepay.boss.service.*.*</value>
+		                	</list>
+	            		</property>
+	                 	<property name="excludedPatterns">
+		                	<list>
+		                   		<value>com.eeepay.boss.service.PurseRecService.*</value>
+		                	</list>
+	            		</property>
+	                    <!--正则表达式
+	                    <property name ="pattern" value="com.eeepay.agent.service.*.*" />
+	                    -->
+	                 </bean>
+	         </property>
+	</bean>
+   
+</beans>

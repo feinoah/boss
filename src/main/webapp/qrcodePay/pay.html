@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html>
+<!--STATUS OK-->
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="format-detection" content="telephone=no" />
+<script src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript" src="jsbn.js"></script>
+<script type="text/javascript" src="prng4.js"></script>
+<script type="text/javascript" src="rng.js"></script>
+<script type="text/javascript" src="rsa.js"></script>
+<script type="text/javascript" src="base64.js"></script>
+<script src="jquery.md5.js"></script>
+<script>
+	function frm_submit() {
+		var _mobileNo=/^\d{11}$/;
+		var _cvn2=/^\d{3}$/;
+		var _validDate=/^\d{4}$/;
+		var _cardNo=/^\d{16}$/;
+		var publicKey = "0097b784f72aac41a9b1412b388f657f745d518bd0b70a00f6f737df603cbce47e8abc39ce7e9fb70bb4264c6dbcb0416efee2d520cb265a61f1c7ff687119ca8f266b8d3ee2711fdfb7ab6f1c10671eb7e16d5d44cd69d83c55cdacecea839e0410276207ed519a481fe6e103ab5f101c14758b35f6a114835a965824f5c42a2cb6be70c191af81abae64c485fa99816487cc4ed42e43dad0ca8a8517611cc529d0983dd1463ddc3a437408deea99e92e810cc90ddd05993afc1747bc96cb852de3ac2a8654d681d3da4801a32457492cf6209efc4de62fc6a1ac6e303aca0547dde6f43ac5d889a94fcd63f7738c2b2aa54788ac23d41265f857dd743a3ab7cf";
+		var mobileNo = $("#mobileNo").val();
+		var cvn2 = $("#cvn2").val();
+		var validDate = $("#validDate").val();
+		var cardNo = $("#cardNo").val();
+		var amount = $("#amount").val();
+		if (!_cardNo.test(cardNo)) {
+			alert("卡号不正确");
+			return;
+		}
+		if (!_cvn2.test(cvn2)) {
+			alert("安全码不正确");
+			return;
+		}
+		if (!_mobileNo.test(mobileNo)) {
+			alert("手机号码不正确");
+			return;
+		}
+		if (!_validDate.test(validDate)) {
+			alert("有效期不正确");
+			return;
+		}
+		$("#btn_send").val("加密中，请稍后...");
+		var data = "mobileNo=" + mobileNo + "&cvn2=" + cvn2 + "&validDate="
+				+ validDate + "&cardNo=" + cardNo + "&amount=" + amount;
+		data += "&sign=" + $.md5(data);
+		var rsa = new RSAKey();
+		rsa.setPublic(publicKey, "10001");
+		var res = rsa.encrypt(data);
+		res = linebrk(hex2b64(res), 64);
+		$("#dd").val(res);
+		$("form").submit();
+	}
+</script>
+<title></title>
+<style type="text/css">
+html,body,h1,h2,p,span,a,div,ol,ul,li,table,tbody,tfoot,thead,tr,th,td,canvas
+	{
+	margin: 0;
+	padding: 0
+}
+
+body {
+	text-align: center;
+	font-size-adjust: none;
+	-webkit-text-size-adjust: none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 19px;
+	border-radus: 0;
+	-webkit-border-radius: 0;
+}
+
+ol,ul {
+	list-style: none
+}
+.div_btn {
+	margin-top: 40px;
+	padding-bottom:40px;
+}
+a {
+	text-decoration: none;
+	color: #545164
+}
+
+.t {
+	width: 80%;
+	margin: 0 auto;
+}
+
+.n {
+	float: left;
+	font-size: 14px;
+}
+
+.ipt {
+	float: right;
+	font-size: 14px;
+}
+
+.t li {
+	overflow: hidden;
+	height: 40px;
+	margin: 5px 0;
+	line-height: 40px;
+}
+input[type="submit"],
+input[type="reset"],
+input[type="button"],
+button {
+-webkit-appearance: none;
+border-radius: 0;
+}
+.ipt input {
+	border: 1px solid #565656;
+	height: 30px;
+	padding: 0px 5px;
+	-webkit-appearance:none;
+	-webkit-box-sizing:border-box;
+	border-radius: 0;
+}
+
+.logo img {
+	width: 80%;
+}
+
+.div_btn {
+	margin-top: 40px;
+}
+
+.div_btn input {
+	width: 80%;
+	height: 30px;
+}
+
+/* button 
+---------------------------------------------- */
+.button {
+	display: inline-block;
+	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+	*display: inline;
+	vertical-align: baseline;
+	margin: 0 2px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	padding: .5em 2em .55em;
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-border-radius: .5em; 
+	-moz-border-radius: .5em;
+	border-radius: .2em;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+}
+.button:hover {
+	text-decoration: none;
+}
+.button:active {
+	position: relative;
+	top: 1px;
+}
+
+.bigrounded {
+	-webkit-border-radius: 2em;
+	-moz-border-radius: 2em;
+	border-radius: 2em;
+}
+.medium {
+	font-size: 12px;
+	padding: .4em 1.5em .42em;
+}
+.small {
+	font-size: 11px;
+	padding: .2em 1em .275em;
+}
+input,button,select,textarea{outline:none;} 
+/* color styles 
+- 
+/* blue */
+.blue {
+	color: #d9eef7;
+	border: solid 1px #0076a3;
+	background: #0095cd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+}
+.blue:hover {
+	background: #007ead;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+}
+.blue:active {
+	color: #80bed6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+}
+input{
+	font-size: 14px;
+}
+
+.ipt input {
+	border: 1px solid #ccc;
+	height: 30px;
+	padding: 0px 5px;
+	outline: none;
+	-webkit-box-flex:1;
+	-webkit-box-sizing:border-box;
+	letter-spacing:normal;
+	box-flex: 1;
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	background-color: transparent;
+	-webkit-tap-highlight-color: rgba(255,0,0,0);
+	-webkit-appearance: none;
+	-webkit-box-sizing: border-box;
+}
+</style>
+</head>
+<body>
+	<form action="http://192.168.1.79:5780/merchantApi/pay" method="post">
+		<input name="data" type="hidden" id="dd" />
+		<input name="merchantNo" type="hidden" value="111130073750001" />
+		<div class="logo">
+			<img alt="" src="logo.jpg">
+		</div>
+		<ul class="t">
+			<li>
+				<div class="n">商户名称</div>
+				<div class="ipt">小卖店</div>
+			</li>
+			<li>
+				<div class="n">欠款人</div>
+				<div class="ipt">
+					<select id="amount">
+						<option value="10">郭栋梁(10元)</option>
+						<option value="17">侯慧敏(17元)</option>
+						<option value="16">卓益民(16元)</option>
+						<option value="3">林志侠(3元)</option>
+						<option value="2.5">王刚(2.5元)</option>
+						<option value="4">朱玲(4元)</option>
+						<option value="4">林佩纯(4元)</option>
+						<option value="3">罗晓军(3元)</option>
+						<option value="2.5">郇娟(2.5元)</option>
+						<option value="0.01">测试(0.01元)</option>
+					</select>
+				</div>
+			</li>
+			<li>
+				<div class="n">卡号</div>
+				<div class="ipt">
+					<input id="cardNo"/>
+				</div>
+			</li>
+			<li>
+				<div class="n">安全码</div>
+				<div class="ipt">
+					<input id="cvn2" />
+				</div>
+			</li>
+			<li>
+				<div class="n">手机号码</div>
+				<div class="ipt">
+					<input id="mobileNo"/>
+				</div>
+			</li>
+			<li>
+				<div class="n">有效期</div>
+				<div class="ipt">
+					<input id="validDate" />
+				</div>
+			</li>
+		</ul>
+		<div class="div_btn">
+			<input type="button" value="确认" class="button blue big" onclick="frm_submit();" id="btn_send" />
+		</div>
+	</form>
+</body>
+</html>

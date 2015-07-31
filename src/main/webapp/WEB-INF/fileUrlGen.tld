@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd" version="2.0">
+	<description>生成阿里云和原来服务器本地存储的文件url</description>
+	<display-name>fileUrlGen</display-name>
+	<tlib-version>0.1</tlib-version>
+	<short-name>fug</short-name>
+	<uri>/WEB-INF/FileUrlGen</uri>
+	<function>
+		<description>
+    	生成阿里云和原来服务器本地存储的文件url	 
+    </description>
+		<name>fileUrlGen</name>
+		<function-class>com.eeepay.boss.utils.el.functions.FileUrlGen</function-class>
+		<function-signature>String fileUrlGen(java.lang.String)</function-signature>
+		<example>
+      		"${FileUrlGen:contains(fileName)}"
+    </example>
+	</function>
+	<function>
+		<description>
+    	生成阿里云和原来服务器本地存储的文件url	 
+    </description>
+		<name>bagFileUrlGen</name>
+		<function-class>com.eeepay.boss.utils.el.functions.FileUrlGen</function-class>
+		<function-signature>String bagFileUrlGen(java.lang.String,java.lang.String)</function-signature>
+	</function>
+</taglib>

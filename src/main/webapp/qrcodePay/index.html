@@ -1,0 +1,65 @@
+<%@page language="java" pageEncoding="UTF-8"%>
+<%@include file="/tag.jsp"%>
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+<meta name="format-detection" content="telephone=no" />
+<script type="text/javascript" src="jquery-1.9.1.min.js"></script>
+<script type="text/javascript">
+	function btn_click(selector,start,end){
+		$(selector).on("touchstart",start);
+		$(selector).on("touchend",end);
+	}
+	$(function() {
+		$(".selectValueGroup div").on("touchstart",function() {
+			$("div.active").removeClass("active");
+			$(this).addClass("active");
+			$("#selectValue").val($(this).attr("data-value"));
+		});
+		btn_click("#btn_send",function(){
+			$(this).addClass("blue_active");
+			
+		},function(){
+			$(this).removeClass("blue_active");
+		});
+	});
+</script>
+<head>
+
+<script>
+	function frm_submit() {
+		license = $('#license').val();
+ 		if(license==''||license.length!=7){
+			alert('请输入境内有效的车牌号码');
+			return;
+		}
+		 
+		document.getElementById("btn_send").disabled=true;
+		document.getElementById("btn_send").value="正在加载中...";
+		$('#f').submit();
+		
+	}
+</script>
+
+<link rel="stylesheet" type="text/css" href="mobile.css" />
+</head>
+<body>
+	<form action="${ctx}/cxy/search" id="f" method="post" style="margin-top: 50px">
+		<input name="data" type="hidden" id="dd" />
+		<input name="merchantNo" type="hidden" id="merchantNo" value="${params['merchantNo']}" />
+		<!-- 选择的金额 -->
+		<input name="selectValue" type="hidden" id="selectValue" value=""/>
+		<ul class="t">
+
+			<li>
+				<div class="ipt">
+					<input type="text" name="license" id="license" maxlength="7" placeholder="请输入车牌号码：如 粤B90909" />
+				</div>
+			</li>
+		</ul>
+		<div class="div_btn">
+			<input type="button" value="确认" class="button blue big" style="height: 40px" onclick="frm_submit();" id="btn_send" name="btn_send" />
+		</div>
+	</form>
+</body>
+</html>

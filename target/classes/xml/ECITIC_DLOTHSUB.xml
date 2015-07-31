@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="GBK"?>
+<stream>
+	<action>DLOTHSUB</action>
+	<userName>@{bankUserName}</userName>
+	<clientID>@{clientID}</clientID>
+	<totalNumber>1</totalNumber>
+	<totalAmount>@{amount}</totalAmount>
+	<payAccountNo>@{out_acc_no}</payAccountNo>
+	<preFlg>0</preFlg>
+	<preDate></preDate>
+	<preTime></preTime>
+	<memo></memo>
+	<list name="userDataList">
+	<row>
+		<recAccountNo>@{in_acc_no}</recAccountNo>
+		<recAccountName>@{in_acc_name}</recAccountName>
+		<tranAmount>@{amount}</tranAmount>
+		<abstract>@{abstract}</abstract>
+	</row>
+	</list>	
+</stream>

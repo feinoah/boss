@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="GBK"?>
+<stream>
+	<action>DLINETRN</action>
+	<userName>@{bankUserName}</userName>
+	<clientID>@{clientID}</clientID>
+	<preFlg>0</preFlg>
+	<preDate></preDate>
+	<preTime></preTime>
+	<payAccountNo>@{out_acc_no}</payAccountNo>
+	<recAccountNo>@{in_acc_no}</recAccountNo>
+	<tranAmount>@{amount}</tranAmount>
+	<abstract>@{abstract}</abstract>
+	<memo></memo>
+</stream>

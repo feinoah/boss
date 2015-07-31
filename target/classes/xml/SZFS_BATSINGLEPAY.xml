@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<BatSinglePay xmlns="szfs.tws.pay.batsinglepay" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <subdate>@{subdate}</subdate>
+    <batno>@{batno}</batno>
+    <corpno>@{corpno}</corpno>
+    <transcode>@{transcode}</transcode>
+    <productcode>@{productcode}</productcode>
+    <feeitem>@{feeitem}</feeitem>
+    <bankno>@{bankno}</bankno>
+    <accno>@{accno}</accno>
+    <accname>@{accname}</accname>
+    <currency>@{currency}</currency>
+    <totalnum>@{totalnum}</totalnum>
+    <totalmoney>@{totalmoney}</totalmoney>
+    <details>
+        @foreach{item :detail}
+		        <detail>
+		            <lstno>@{item.lstno}</lstno>
+		            <outid>@{item.outid}</outid>
+		            <custbankno>@{item.custbankno}</custbankno>
+		            <custaccno>@{item.custaccno}</custaccno>
+		            <custaccname>@{item.custaccname}</custaccname>
+		            <alternameflag>0</alternameflag>
+		            <money>@{item.money}</money>
+		            @if{summary !=''}<memo>@{summary}</memo>@end{}
+		        </detail>
+        @end{}
+    </details>
+</BatSinglePay>

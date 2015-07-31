@@ -1,0 +1,191 @@
+html,body,h1,h2,p,span,a,div,ol,ul,li,table,tbody,tfoot,thead,tr,th,td,canvas
+	{
+	margin: 0;
+	padding: 0
+}
+
+body {
+	text-align: center;
+	font-size-adjust: none;
+	-webkit-text-size-adjust: none;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 19px;
+	border-radus: 0;
+	-webkit-border-radius: 0;
+}
+
+ol,ul {
+	list-style: none
+}
+
+.div_btn {
+	margin-top: 10px;
+	padding-bottom: 10px;
+}
+
+a {
+	text-decoration: none;
+	color: #545164
+}
+
+.n {
+	float: left;
+	font-size: 14px;
+}
+
+.ipt {
+	font-size: 14px;
+}
+
+.t li {
+	overflow: hidden;
+	height: 44px;
+	margin: 5px 0;
+	line-height: 44px;
+}
+
+input[type="submit"],input[type="reset"],input[type="button"],button {
+	-webkit-appearance: none;
+	border-radius: 0;
+}
+
+.ipt input {
+	border: 1px solid #565656;
+	height: 40px;
+	padding: 0px 5px;
+	-webkit-appearance: none;
+	-webkit-box-sizing: border-box;
+	border-radius: 0;
+}
+
+
+.div_btn input,.ipt input {
+	width: 95%;
+	height: 40px;
+}
+
+/* button 
+---------------------------------------------- */
+.button {
+	-webkit-appearance: none;
+	border-radius: 0;
+	display: inline-block;
+	zoom: 1; /* zoom and *display = ie7 hack for display:inline-block */
+	*display: inline;
+	vertical-align: baseline;
+	margin: 0 2px;
+	outline: none;
+	cursor: pointer;
+	text-align: center;
+	text-decoration: none;
+	font: 14px/100% Arial, Helvetica, sans-serif;
+	padding: .5em 2em .55em;
+	text-shadow: 0 1px 1px rgba(0,0,0,.3);
+	-webkit-border-radius: .5em; 
+	-moz-border-radius: .5em;
+	border-radius: .2em;
+	-webkit-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	-moz-box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	box-shadow: 0 1px 2px rgba(0,0,0,.2);
+	
+	-webkit-tap-highlight-color: rgba(255, 0, 0, 0);
+	
+}
+.button:hover {
+	text-decoration: none;
+}
+.button:active {
+	
+}
+
+.bigrounded {
+	-webkit-border-radius: 2em;
+	-moz-border-radius: 2em;
+	border-radius: 2em;
+}
+.medium {
+	font-size: 12px;
+	padding: .4em 1.5em .42em;
+}
+.small {
+	font-size: 11px;
+	padding: .2em 1em .275em;
+}
+input,button,select,textarea{outline:none;} 
+/* color styles 
+- 
+/* blue */
+.blue {
+	color: #d9eef7;
+	border: solid 1px #0076a3;
+	background: #0095cd;
+	background: -webkit-gradient(linear, left top, left bottom, from(#00adee), to(#0078a5));
+	background: -moz-linear-gradient(top,  #00adee,  #0078a5);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#00adee', endColorstr='#0078a5');
+}
+.blue_hover {
+	background: #007ead;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0095cc), to(#00678e));
+	background: -moz-linear-gradient(top,  #0095cc,  #00678e);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0095cc', endColorstr='#00678e');
+}
+.blue_active {
+	position: relative;
+	top: 1px;
+	color: #80bed6;
+	background: -webkit-gradient(linear, left top, left bottom, from(#0078a5), to(#00adee));
+	background: -moz-linear-gradient(top,  #0078a5,  #00adee);
+	filter:  progid:DXImageTransform.Microsoft.gradient(startColorstr='#0078a5', endColorstr='#00adee');
+}
+
+input {
+	font-size: 14px;
+	outline: none;
+	-webkit-appearance: none;
+	-webkit-box-sizing: border-box;
+	border-radius: 0;
+}
+
+.ipt input {
+	border: 1px solid #ccc;
+	height: 35px;
+	padding: 0px 5px;
+	outline: none;
+	-webkit-box-flex: 1;
+	-webkit-box-sizing: border-box;
+	letter-spacing: normal;
+	box-flex: 1;
+	border-radius: 0;
+	-webkit-border-radius: 0;
+	background-color: transparent;
+	-webkit-tap-highlight-color: rgba(255, 0, 0, 0);
+	-webkit-appearance: none;
+	-webkit-box-sizing: border-box;background: white;
+}
+
+.selectValueGroup .active {
+	background-color:#b3b3b3;
+}
+.selectOption {
+	height: 35px;
+	line-height:35px;
+	width:30%;
+	background: #f6f6f6;
+	border:1px solid #d8d8d8;
+	margin-right: 3px;
+	-webkit-appearance: none;
+	-webkit-box-sizing: border-box;
+	border-radius: 0;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+	
+}
+.left{float: left}
+.right{float:right}
+.ml5{margin-left: 5%}
+.selectValueGroup {
+	width: 95%;
+	margin: 0 auto;
+}
+body{
+background: url("../images/bg.png");}
+ 

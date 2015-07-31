@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd"
+	default-lazy-init="false">
+
+	<description>quartz Configuration</description>
+
+	<!-- 配置执行定时任务的类和方法 -->   
+    <bean id="dayRiskDetail"    
+        class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">    
+        <property name="targetObject">    
+            <bean class="com.eeepay.boss.controller.RiskController"></bean>  
+        </property>    
+        <property name="targetMethod">    
+            <value>riskResultAdd</value>    
+        </property>    
+    </bean>
+    <!-- 配置触发器 -->     
+    <bean id="dayRiskTrigger"    
+        class="org.springframework.scheduling.quartz.CronTriggerBean">    
+        <property name="jobDetail">    
+            <ref bean="dayRiskDetail"/> <!-- 触发器触发的 执行定时任务的bean -->     
+        </property>    
+        <property name="cronExpression">    
+            <!-- 每天1时   -->  <!-- 定时任务执行的间隔 
+            <value>0/3 * * * * ?</value>   
+            -->
+             <value>0 0 1 * * ?</value>
+        </property>    
+    </bean>
+    
+    
+    <!-- 触发器  transInfoTrigger 执行定时任务的类和方法 -->   
+    <bean id="transInfoDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">    
+        <property name="targetObject">    
+            <bean class="com.eeepay.boss.controller.RiskController"></bean>  
+        </property>    
+        <property name="targetMethod">    
+            <value>getTimeOutRecord</value>    
+        </property>    
+    </bean>
+    <!-- 配置触发器  transInfoTrigger -->     
+    <bean id="transInfoTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">    
+        <property name="jobDetail">    
+            <ref bean="transInfoDetail"/> <!-- 触发器触发的 执行定时任务的bean -->     
+        </property>    
+        <property name="cronExpression">    
+            <!-- 每隔3秒钟   -->  <!-- 定时任务执行的间隔 
+             <value>59 0/2 * * * ?</value>
+            -->   
+             <value>0/30 * * * * ?</value>
+        </property>    
+    </bean>
+    
+    <!-- lzj   将已冻结的状态改为成功的状态的定时任务(每天凌晨1点) -->
+    <!-- 触发器  freezeChangeTrigger 执行定时任务的类和方法 -->   
+    <bean id="freezeChangeDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">    
+        <property name="targetObject">    
+            <bean class="com.eeepay.boss.controller.MerchantController"></bean>  
+        </property>    
+        <property name="targetMethod">    
+           <!--  <value>freezeStatusChange</value>     -->
+            <value>freezeStatusChangeNew</value> 
+        </property>
+    </bean>
+    <!-- 配置触发器  freezeChangeTrigger -->     
+    <bean id="freezeChangeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">    
+        <property name="jobDetail">    
+            <ref bean="freezeChangeDetail"/> <!-- 触发器触发的 执行定时任务的bean -->     
+        </property>    
+        <property name="cronExpression">    
+             <value>0 0 1 * * ?</value>
+        </property>    
+    </bean>
+    
+    <!-- 修改商户代理商次月1号2时生效触发器  -->   
+    <bean id="agentChangeDetail" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">    
+        <property name="targetObject">    
+            <bean class="com.eeepay.boss.controller.MerchantController"></bean>  
+        </property>    
+        <property name="targetMethod">    
+            <value>enableAgentChange</value>    
+        </property>    
+    </bean>
+    <bean id="agentChangeTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">    
+        <property name="jobDetail">    
+            <ref bean="agentChangeDetail"/>  
+        </property>    
+        <property name="cronExpression">    
+             <value>0 0 2 1 * ? *</value>
+        </property>    
+    </bean>
+
+    <!-- 统计收单商户交易定时任务 -->
+    <bean id="acqMerchantTransCount" class="com.eeepay.boss.task.AcqMerchantTransCountTask" >
+        <property name="sendTo"     value="${acqMerchantTransCountTask.sendTo}" />
+        <property name="sendFrom"   value="${acqMerchantTransCountTask.sendFrom}" />
+        <property name="host"       value="${acqMerchantTransCountTask.host}" />
+        <property name="username"   value="${acqMerchantTransCountTask.username}" />
+        <property name="password"   value="${acqMerchantTransCountTask.password}" />
+        <property name="subject"    value="${acqMerchantTransCountTask.subject}" />
+        <property name="content"    value="${acqMerchantTransCountTask.content}" />
+        <property name="acqOrg"     value="${acqMerchantTransCountTask.acqOrg}" />
+    </bean>
+    <bean id="acqMerchantTransCountTask" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject" ref="acqMerchantTransCount" />
+        <property name="targetMethod" value="execute" />
+    </bean>
+    <bean id="acqMerchantTransCountTaskTrigger" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="acqMerchantTransCountTask" />
+        <property name="cronExpression" value="0 30 0 * * ?" />
+    </bean>
+    
+    <!-- ======================== 调度工厂 ======================== -->  
+	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean"> 
+	<property name="exposeSchedulerInRepository" value="true" />
+    <!--必须，QuartzScheduler 延时启动，应用启动后 QuartzScheduler 再启动-->  
+    <property name="startupDelay" value="60"/>   
+    <property name="triggers">  
+        <list>  
+            <ref bean="dayRiskTrigger"/>
+             <!-- 每三秒每3秒钟查询一次最近5条消费的交易记录，如果连续有5条消费记录为初始化状态，则发送系统告警短信，此时系统已经出现问题 -->  
+            <!-- 暂时屏蔽
+             <ref bean="transInfoTrigger"/>
+             -->
+             <ref bean="agentChangeTrigger"/>
+             <!-- lzj   将已冻结的状态改为成功的状态的定时任务 -->
+             <ref bean="freezeChangeTrigger"/>
+
+            <ref bean="acqMerchantTransCountTaskTrigger"/>
+        </list> 
+    </property> 
+    <property name="quartzProperties">
+	   <props>
+	    <prop key="org.quartz.scheduler.skipUpdateCheck">true</prop>
+	   </props>
+	  </property> 
+	</bean> 
+</beans>

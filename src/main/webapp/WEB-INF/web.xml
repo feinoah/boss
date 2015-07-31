@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0">
+	<display-name>boss</display-name>
+
+	<!-- spring  classpath:net/bull/javamelody/monitoring-spring.xml-->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>
+			classpath:net/bull/javamelody/monitoring-spring.xml
+			classpath*:applicationContext.xml
+			classpath:spring/quartz.xml
+		</param-value>
+	</context-param>
+	
+
+<!-- 性能监控插件  开始-->
+     <filter>
+          <filter-name>javamelody</filter-name>
+          <filter-class>net.bull.javamelody.MonitoringFilter</filter-class>
+          <async-supported>true</async-supported>
+           <init-param>
+            <!-- set a different URL for monitoring -->
+            <param-name>monitoring-path</param-name>
+            <param-value>/monitoring</param-value>
+        </init-param>
+        <init-param>
+         	<param-name>log</param-name>
+        	<param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <!-- enable/disable JavaMelody -->
+            <param-name>disabled</param-name>
+            <param-value>false</param-value>
+        </init-param>
+          <init-param>
+       		<param-name>storage-directory</param-name>
+            <param-value>${catalina.base}/javamelody-data</param-value>
+          </init-param>
+          <init-param>
+		        <param-name>url-exclude-pattern</param-name>
+		        <param-value>/images/*,/scripts/*</param-value>
+    		</init-param>
+          <init-param>
+          	<param-name>authorized-users</param-name>
+        	<param-value>monitoring:monitoring</param-value>
+          </init-param>
+    </filter>
+     <filter-mapping>
+        <filter-name>javamelody</filter-name>
+        <url-pattern>/*</url-pattern>
+         <dispatcher>REQUEST</dispatcher>
+        <dispatcher>ASYNC</dispatcher>
+    </filter-mapping>
+  	<listener>
+         <listener-class>net.bull.javamelody.SessionListener</listener-class>
+ 	</listener>
+ 	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	<!-- Character Encoding filter -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- Shiro Security filter -->
+	<filter>
+		<filter-name>shiroFilter</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+		<init-param>
+			<param-name>targetFilterLifecycle</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- SiteMesh Web-Page Layout filter -->
+	<filter>
+		<filter-name>sitemeshFilter</filter-name>
+		<filter-class>com.opensymphony.sitemesh.webapp.SiteMeshFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>sitemeshFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+	<!-- <filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>com.eeepay.boss.filter.EncodingFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>encoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping> -->
+	
+	<!-- spring mvc -->
+	<servlet>
+		<servlet-name>mvc</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath*:mvc-servlet.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>mvc</servlet-name>
+		<url-pattern>/</url-pattern>
+	</servlet-mapping>
+	<!-- captcha servlet config -->
+	<servlet>
+		<servlet-name>CaptchaServlet</servlet-name>
+		<servlet-class>com.eeepay.boss.auth.CaptchaServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>CaptchaServlet</servlet-name>
+		<url-pattern>/servlet/captchaCode</url-pattern>
+	</servlet-mapping>
+
+	<servlet-mapping>
+		<servlet-name>default</servlet-name>
+		<url-pattern>*.png</url-pattern>
+		<url-pattern>*.jpg</url-pattern>
+		<url-pattern>*.gif</url-pattern>
+		<url-pattern>*.js</url-pattern>
+		<url-pattern>*.css</url-pattern>
+		<url-pattern>*.ico</url-pattern>
+		<url-pattern>*.swf</url-pattern>
+		<url-pattern>*.zip</url-pattern>
+		<url-pattern>*.xml</url-pattern>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+	<servlet>
+		<servlet-name>uploadFile</servlet-name>
+		<servlet-class>com.eeepay.boss.servlet.UploadServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>uploadFile</servlet-name>
+		<url-pattern>/servlet/upload</url-pattern>
+	</servlet-mapping>
+	
+		<servlet>
+		<servlet-name>UploadServletForKindeditor</servlet-name>
+		<servlet-class>com.eeepay.boss.servlet.UploadServletForKindeditor</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>UploadServletForKindeditor</servlet-name>
+		<url-pattern>/servlet/UploadServletForKindeditor</url-pattern>
+	</servlet-mapping>
+	
+	<jsp-config>
+		<taglib>
+			<taglib-uri>/WEB-INF/pagebar.tld</taglib-uri>
+			<taglib-location>/WEB-INF/pagebar.tld</taglib-location>
+		</taglib>
+		<taglib>
+			<taglib-uri>/WEB-INF/util.tld</taglib-uri>
+			<taglib-location>/WEB-INF/util.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+	<error-page>
+     <error-code>404</error-code>
+     <location>/error.jsp</location>
+	</error-page>
+	<error-page>
+    <error-code>500</error-code>
+    <location>/error.jsp</location>
+	</error-page>
+	
+	<welcome-file-list>
+	    <welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+	
+</web-app>
